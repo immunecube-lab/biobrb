@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// Sort posts by date (newest first)
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+// Find the featured post (where featured is true) or default to the newest
+const featuredPost = sortedPosts.find(post => post.data.featured) || sortedPosts[0];
+
+// Filter out the featured post for the grid list
+const gridPosts = sortedPosts.filter(post => post.id !== featuredPost.id);
+---
+
+<Layout title="BioBRB | 자연의 지혜와 과학으로 읽는 건강" description="생활면역을 탐구하고 기록하는 에디터 공간. 저분자 아라비노자일란 BioBRB와 프리미엄 건강 솔루션 케이뮨 살루트와 함께합니다.">
+  <Header />
+
+  <main class="main-content">
+    <div class="container" style="margin-top: 2rem;">
+      
+      <!-- Tabs for Archive Mode -->
+      <div class="archive-mode-tabs">
+        <a class="nav-link-tab active" href="/">추천 글</a>
+      </div>
+
+      <!-- Featured Hero Post -->
+      {featuredPost && (
+        <section class="featured-hero reveal" data-post-category={featuredPost.data.category}>
+          <div class="featured-image-wrapper">
+            <a href={`/posts/${featuredPost.id}`}>
+              <img src={featuredPost.data.coverImage} alt={featuredPost.data.title} class="featured-image" />
+            </a>
+          </div>
+          <div class="featured-content">
+            <span class="category-tag">{featuredPost.data.category}</span>
+            <h2 class="featured-title">
+              <a href={`/posts/${featuredPost.id}`}>{featuredPost.data.title}</a>
+            </h2>
+            <div class="meta-line">
+              <span><i class="fa-regular fa-user"></i> 글쓴이: {featuredPost.data.author}</span>
+              <span><i class="fa-regular fa-calendar"></i> {featuredPost.data.date}</span>
+              <span><i class="fa-regular fa-clock"></i> 읽는 시간: 약 2분</span>
+            </div>
+            <p class="excerpt">{featuredPost.data.excerpt}</p>
+            <a class="read-more-btn" href={`/posts/${featuredPost.id}`}>에세이 읽기</a>
+          </div>
+        </section>
+      )}
+
+      <!-- Editorial Horizontal Divider -->
+      <hr class="editorial-hr double" />
+
+      <!-- Major Columns Grid -->
+      <section style="margin-top: 3rem;">
+        <h3 class="grid-section-title" id="article-section-title">주요 글</h3>
+        <div class="article-grid">
+          {gridPosts.map((post) => (
+            <article class="article-card reveal" data-post-category={post.data.category}>
+              <div class="card-image-wrapper">
+                <a href={`/posts/${post.id}`}>
+                  <img src={post.data.coverImage} alt={post.data.title} class="card-image" />
+                </a>
+              </div>
+              <div class="article-card-content">
+                <span class="category-tag">{post.data.category}</span>
+                <h4 class="card-title">
+                  <a href={`/posts/${post.id}`}>{post.data.title}</a>
+                </h4>
+                <div class="meta-line" style="font-size: 0.8rem; margin-bottom: 0.8rem; padding-bottom: 0.5rem;">
+                  <span>{post.data.date}</span>
+                  <span>{post.data.author}</span>
+                </div>
+                <p class="card-excerpt">{post.data.excerpt}</p>
+                <div class="tag-list">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="tag-badge">#{tag}</span>
+                  ))}
+                </div>
+                <a class="read-more-btn" style="font-size: 0.85rem; align-self: flex-start;" href={`/posts/${post.id}`}>에세이 읽기</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- Sponsor/Brand Banner -->
+      <div class="brand-sponsor-banner">
+        <h4>생활면역 저널의 든든한 동반자</h4>
+        <p>
+          본 칼럼은 특허 생명공학 공법인 버섯 균사체 효소 발효 기술을 거쳐 탄생한 면역소재인 <strong>BioBRB</strong>를 개발한 (주)STR바이오텍에서 운영합니다.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+
+  <script>
+    const categoryLabels: Record<string, string> = {
+      Immunity: '생활면역',
+      Health: '건강 이야기',
+      BioBRB: '원료 이야기',
+      Synergy: '시너지 소재',
+      Products: '관련 제품',
+    };
+
+    const selectedCategory = new URLSearchParams(window.location.search).get('category');
+    const activeCategory = selectedCategory && categoryLabels[selectedCategory]
+      ? selectedCategory
+      : 'all';
+
+    document.querySelectorAll<HTMLElement>('[data-post-category]').forEach((post) => {
+      post.hidden = activeCategory !== 'all' && post.dataset.postCategory !== activeCategory;
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-nav-category]').forEach((link) => {
+      const isActive = link.dataset.navCategory === activeCategory;
+      link.classList.toggle('active', isActive);
+      if (isActive) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+
+    const sectionTitle = document.getElementById('article-section-title');
+    if (sectionTitle && activeCategory !== 'all') {
+      sectionTitle.textContent = `${categoryLabels[activeCategory]} 글`;
+    }
+  </script>
+</Layout>

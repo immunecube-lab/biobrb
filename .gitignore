@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Astro build output and cache
+dist/
+.astro/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local Codex workspace metadata
+.codex/
+.agents/

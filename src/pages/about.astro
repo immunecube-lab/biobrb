@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="블로그 소개 | BioBRB"
+  description="자연의 지혜와 과학을 바탕으로 생활면역과 BioBRB를 살펴보는 건강 콘텐츠 저널입니다."
+>
+  <Header />
+
+  <main class="main-content">
+    <article class="article-container about-page">
+      <header class="article-header">
+        <span class="category-tag">ABOUT BIOBRB</span>
+        <h1>생활면역을 읽고 기록합니다</h1>
+        <p class="about-intro">
+          자연에서 얻은 소재와 건강에 관한 지식이 일상과 어떻게 이어지는지
+          차분하게 살펴보는 콘텐츠 저널입니다.
+        </p>
+      </header>
+
+      <div class="article-body">
+        <h2>이 블로그가 다루는 것</h2>
+        <p>
+          BioBRB는 (주)에스티알바이오텍에서 개발한 BioBRB 면역소재를 소개하기 위한 사이트입니다. 
+          BioBRB는 면역소재이기 때문에 면역에 대한 이야기와, 
+          그외 수면, 식습관, 스트레스처럼 매일의 생활과 맞닿아 있는
+          <strong>생활면역</strong>을 중심으로 글을 씁니다. 
+          면역세포가 작동하는 방식,
+          흑미강 발효분말 BioBRB의 원료와 제조 과정, 함께 살펴볼 만한 영양소도
+          이해하기 쉬운 언어로 정리합니다.
+        </p>
+
+        <div class="about-topics" aria-label="주요 콘텐츠 분야">
+          <section>
+            <h3>생활면역</h3>
+            <p>수면, 운동, 식습관처럼 일상에서 건강의 균형을 돌보는 방법을 살펴봅니다.</p>
+          </section>
+          <section>
+            <h3>건강 이야기</h3>
+            <p>몸과 건강을 이해하는 데 도움이 되는 다양한 주제를 쉽게 풀어봅니다.</p>
+          </section>
+          <section>
+            <h3>원료 이야기</h3>
+            <p>BioBRB와 흑미강, 발효 공정 및 관련 연구자료의 의미를 정리합니다.</p>
+          </section>
+          <section>
+            <h3>시너지 소재</h3>
+            <p>홍삼, 아연, 비타민 D처럼 면역 기능과 관련된 영양소를 함께 알아봅니다.</p>
+          </section>
+          <section>
+            <h3>관련 제품</h3>
+            <p>BioBRB를 활용한 제품의 구성과 특징, 섭취 정보를 알기 쉽게 소개합니다.</p>
+          </section>
+        </div>
+
+        <h2>자료를 읽는 기준</h2>
+        <p>
+          건강에 관한 정보는 근거의 범위를 넘어서지 않는 것이 중요합니다. 이 사이트는
+          세포실험, 동물실험, 사람 대상 연구를 구분하고, 연구에서 관찰된 가능성을
+          실제 효능처럼 단정하지 않으려 합니다. 제품과 원료를 소개할 때도 질병의
+          예방이나 치료를 약속하는 표현은 사용하지 않습니다.
+        </p>
+
+        <blockquote>
+          어려운 과학을 과장하지 않고, 일상에서 이해할 수 있는 언어로 옮기는 것이
+          이 저널의 편집 원칙입니다.
+        </blockquote>
+
+        <p class="about-note">
+          이곳의 글은 건강정보를 이해하기 위한 일반적인 콘텐츠이며 의료인의 진단이나
+          치료를 대신하지 않습니다. 개인의 건강 상태와 섭취에 관한 판단은 전문가와
+          상담하시기 바랍니다.
+        </p>
+      </div>
+
+      <footer class="article-footer">
+        <a href="/" class="back-to-home">
+          <i class="fa-solid fa-arrow-left"></i>
+          글 목록으로 돌아가기
+        </a>
+      </footer>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .about-page {
+    max-width: 860px;
+  }
+
+  .about-intro {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+
+  .about-topics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 2.5rem 0 3.5rem;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .about-topics section {
+    padding: 1.5rem;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .about-topics h3 {
+    margin: 0 0 0.6rem;
+    color: var(--brand-navy);
+    font-size: 1.15rem;
+  }
+
+  .about-topics p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    text-align: left;
+  }
+
+  .about-note {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 640px) {
+    .about-topics {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

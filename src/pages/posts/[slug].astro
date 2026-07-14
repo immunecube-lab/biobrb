@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, author, category, coverImage, excerpt } = post.data;
+---
+
+<Layout title={`${title} | BioBRB`} description={excerpt}>
+  <Header />
+
+  <main class="main-content">
+    <article class="article-container">
+      <header class="article-header">
+        <span class="category-tag">{category}</span>
+        <h1>{title}</h1>
+        <div class="meta-line">
+          <span><i class="fa-regular fa-user"></i> 글쓴이: {author}</span>
+          <span><i class="fa-regular fa-calendar"></i> {date}</span>
+          <span><i class="fa-regular fa-clock"></i> 읽는 시간: 약 2분</span>
+        </div>
+      </header>
+
+      {coverImage && (
+        <div class="article-main-image">
+          <img src={coverImage} alt={title} />
+        </div>
+      )}
+
+      <div class="article-body">
+        <Content />
+      </div>
+
+      <footer class="article-footer">
+        <a href="/" class="back-to-home">
+          <i class="fa-solid fa-arrow-left"></i>
+          목록으로 돌아가기
+        </a>
+      </footer>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>

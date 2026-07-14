@@ -1,0 +1,174 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <!-- Background Glowing Meshes -->
+    <div class="glowing-mesh mesh-1"></div>
+    <div class="glowing-mesh mesh-2"></div>
+    <div class="glowing-mesh mesh-3"></div>
+
+    <slot />
+
+    <script>
+      // Client-side JS code
+      document.addEventListener('DOMContentLoaded', () => {
+        // 1. Sticky Header
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 50) {
+            header?.classList.add('scrolled');
+          } else {
+            header?.classList.remove('scrolled');
+          }
+        });
+
+        // 2. Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        if (mobileMenuBtn && navMenu) {
+          mobileMenuBtn.addEventListener('click', () => {
+            if (navMenu.style.display === 'flex') {
+              navMenu.style.display = 'none';
+            } else {
+              navMenu.style.display = 'flex';
+              navMenu.style.flexDirection = 'column';
+              navMenu.style.position = 'absolute';
+              navMenu.style.top = '70px';
+              navMenu.style.left = '0';
+              navMenu.style.width = '100%';
+              navMenu.style.background = 'rgba(7, 11, 19, 0.95)';
+              navMenu.style.padding = '2rem';
+              navMenu.style.borderBottom = '1px solid var(--border-color)';
+              navMenu.style.gap = '1.5rem';
+            }
+          });
+        }
+
+        // 3. Scroll Reveal Animation using IntersectionObserver
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.15,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 4. Interactive Tabs for Scientific Mechanism
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-tab');
+
+            tabButtons.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            btn.classList.add('active');
+            const targetContent = document.getElementById(targetId || '');
+            if (targetContent) {
+              targetContent.classList.add('active');
+            }
+          });
+        });
+
+        // 5. Counter Animation for K-Immune Salut Metrics
+        const metricValues = document.querySelectorAll('.metric-val');
+        let counterStarted = false;
+
+        const countUp = (element: HTMLElement) => {
+          const targetValAttr = element.getAttribute('data-target');
+          if (!targetValAttr) return;
+          const target = parseInt(targetValAttr, 10);
+          const duration = 2000;
+          const stepTime = Math.max(Math.floor(duration / target), 15);
+          let current = 0;
+
+          const timer = setInterval(() => {
+            const increment = Math.ceil(target / (duration / stepTime));
+            current += increment;
+
+            if (current >= target) {
+              element.textContent = target.toLocaleString();
+              clearInterval(timer);
+            } else {
+              element.textContent = current.toLocaleString();
+            }
+          }, stepTime);
+        };
+
+        const metricsSection = document.querySelector('.int-metrics');
+        if (metricsSection) {
+          const metricsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && !counterStarted) {
+                counterStarted = true;
+                metricValues.forEach(val => countUp(val as HTMLElement));
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            threshold: 0.5
+          });
+
+          metricsObserver.observe(metricsSection);
+        }
+
+        // 6. Accordion FAQ Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+          const question = item.querySelector('.faq-question');
+          const answer = item.querySelector('.faq-answer') as HTMLElement;
+
+          if (question && answer) {
+            question.addEventListener('click', () => {
+              const isActive = item.classList.contains('active');
+
+              faqItems.forEach(i => {
+                i.classList.remove('active');
+                const ans = i.querySelector('.faq-answer') as HTMLElement;
+                if (ans) ans.style.maxHeight = '0px';
+              });
+
+              if (!isActive) {
+                item.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
